@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check auth
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User profiles & study stats
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || !isAuthenticated(); // allow initial guest creation
+      
+      // User chat messages
+      match /chats/{chatId} {
+        allow read, write: if isOwner(userId) || !isAuthenticated();
+      }
+
+      // User study history / notes
+      match /studyLogs/{logId} {
+        allow read, write: if isOwner(userId) || !isAuthenticated();
+      }
+    }
+
+    // Public topic modules and global community discussions
+    match /topics/{topicId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /globalDiscussions/{messageId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

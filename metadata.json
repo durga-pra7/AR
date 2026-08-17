@@ -1,0 +1,6 @@
+{
+  "name": "CodeMind - Cybernetic Academy",
+  "description": "An interactive Computer Science learning platform featuring 3D AR concept visualization, AI tutor assistance, real-time analytics, and futuristic glassmorphic UI.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
